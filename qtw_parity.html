@@ -1,0 +1,160 @@
+<!doctype html>
+<html>
+<head>
+ <title> Cube Parity of a Quarter-Twist for NxN Supercube </title>
+ <meta name="robots" content="noindex, nofollow">
+ <link rel=icon href=mini_cube.png type=image/png>
+ <link rel="stylesheet" type="text/css" href="style.css">
+ <meta name=viewport content="width=device-width, initial-scale=1">
+ <style>
+   .tabdata td { 
+     border-color:black; text-align:center;
+     padding-left:15px; padding-right:15px;
+   } 
+ </style>
+</head>
+<body>
+<center>
+<font size="+2"> Cube Parity of a Quarter-Twist for NxN Supercube </font>
+<br><br>
+<p>The following table shows the Parity (0=Even, 1=Odd) for each Orbit Type for
+a Quarter-Twist (Face or Slice) applied to a solved Supercube.
+Each value is the sum (mod 2) of all cube piece orbit parities for the same
+Orbit Type.
+For Face twists, Parity of X-Center and +Center Orbit Types varies by cube size
+and the value is the result of equation: V = Floor((N-2)/2) mod 2.</p>
+<br>
+<table class=tabdata style=border-collapse:collapse;border-color:white border=1>
+ <tr><td> <b>Orbit Type</b> </td><td> <b>Face</b> </td><td> <b>Slice</b> </td></tr>
+ <tr><td> Corners </td><td> 1 </td><td> 0 </td></tr>
+ <tr><td> Central Edges </td><td> 1 </td><td> 0 </td></tr>
+ <tr><td> Wing Edges </td><td> 0 </td><td> 1 </td></tr>
+ <tr><td> X Centers </td><td> V </td><td> 0 </td></tr>
+ <tr><td> + Centers </td><td> V </td><td> 1 </td></tr>
+ <tr><td> Arc Centers </td><td> 0 </td><td> 0 </td></tr>
+</table>
+<br><br>
+<p>The following table shows Cube Parity for Quarter-Twists by Cube Size.
+Slice twists are not applicable in the fixed-center model for cube size less
+than three. Obvious patterns emerge.</p>
+<br>
+<table class=tabdata style=border-collapse:collapse;border-color:white border=1>
+ <tr> <td> <td colspan=13> Cube Size </td> </tr>
+ <tr>
+  <td>   </td>
+  <td> 2 </td>
+  <td> 3 </td>
+  <td> 4 </td>
+  <td> 5 </td>
+  <td> 6 </td>
+  <td> 7 </td>
+  <td> 8 </td>
+  <td> 9 </td>
+  <td> 10 </td>
+  <td> 11 </td>
+  <td> 12 </td>
+  <td> 13 </td>
+  <td> 14 </td>
+ </tr>
+ <tr>
+  <td>Face</td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+ </tr>
+ <tr>
+  <td> Slice </td>
+  <td> - </td>
+  <td> - </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+ </tr>
+</table>
+<br><br>
+<p>To see how the Face values are obtained look at the following table which
+includes the V values.
+For cubes with size &gt; 3, Parity is always Even for odd-size cubes because
+the sum of the V values for X-Center and +Center parities is always Even 
+(they are always both Even or both Odd) as is the sum of Corner and Central
+Edge Parity (they are always both Odd).
+Therefore, the V value (for X-Centers) only comes into play for even-size cubes
+and since it is summed with Corner Parity which is always Odd.
+The result is that Face Quarter-Twist Parity is the toggled value of the V
+value (for even-size cubes).</p>
+<br>
+<table class=tabdata style=border-collapse:collapse;border-color:white border=1>
+ <tr> <td> <td colspan=13> Cube Size </td> </tr>
+ <tr>
+  <td>   </td>
+  <td> 2 </td>
+  <td> 3 </td>
+  <td> 4 </td>
+  <td> 5 </td>
+  <td> 6 </td>
+  <td> 7 </td>
+  <td> 8 </td>
+  <td> 9 </td>
+  <td> 10 </td>
+  <td> 11 </td>
+  <td> 12 </td>
+  <td> 13 </td>
+  <td> 14 </td>
+ </tr>
+ <tr>
+  <td> V </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+ </tr>
+ <tr>
+  <td>Face</td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 0 </td>
+  <td> 1 </td>
+ </tr>
+</table>
+<br>
+<a href="javascript: history.go(-1)">Back</a>
+<br><br>
+</center>
+</body>
+</html>

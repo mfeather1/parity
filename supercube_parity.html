@@ -1,0 +1,205 @@
+<!doctype html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title> Supercube Parity </title>
+ <meta name="robots" content="noindex, nofollow">
+ <link rel=icon href=mini_cube.png type=image/png>
+ <link rel="stylesheet" type="text/css" href="style.css">
+ <meta name=viewport content="width=device-width, initial-scale=1">
+ <style> 
+  .td1 td {padding-left:10px; padding-right:10px; padding-top:10px; padding-bottom:10px; border-color:black;}
+  .td2 td {padding-left:10px; padding-right:10px; border:1px solid; color:black;}
+ </style>
+ <script src=hist.js></script>
+</head>
+<body>
+<center>
+<font size=+2> Solvability</font>
+<br><br>
+<p>This page shows how to determine solvability for any given
+permutation of a Supercube of any dimension by using parity.
+This is useful for validating a cube configuration for input to a cube
+solver or other cube software.
+As pre-requisites one should be familiar with cube piece
+<a href=cube_diagram.html>Orbits</a> and have an understanding of
+<a href=parity.html>Parity of a Permutation</a>.
+<br><br>
+For a permutation of the Supercube to be solvable, the following 
+must be true:</p>
+  <br>
+  <table class=td1 style=border-collapse:collapse;border-color:white border 1>
+   <tr>
+    <td> 1 </td>
+    <td> The Central Edge orbit has the same parity as the Corners</td>
+   </tr>
+   <tr>
+    <td> 2 </td>
+    <td> All X-Center orbits have the same parity as the Corners</td>
+   </tr>
+   <tr>
+    <td> 3 </td>
+    <td> The +Center orbits have the same parity as the Wing Edges but the
+         values are toggled if Corners have parity 
+    </td>
+   </tr>
+  </table>
+  <br>
+  <p>
+  For a 4x4 cube or larger the following will show the parity for all orbits.
+  Enter the parity values for the Corner and Wing Edge orbits as a string of 
+  0's and 1's (1 = odd parity) as they appear in the bottom row of the lower 
+  left <a href=cube_diagram.html#quad>quadrant</a> of the cube.  
+  For example, a 6x6 cube where the corner and first wing edge orbits have 
+  parity but the second wing edge orbit does not would be entered as 110, for
+  something more interesting try 1001110010001100 (or any random string).
+  To see all parity states for cubes up to dimension 15 go 
+  <a href=supercube_parity2.html>here</a>.</p>
+<br>
+<script>
+  blue = "#4080FF";
+  hst();
+  parity = (typeof(parity) == 'undefined') ? '' : unescape(parity.replace(/\+/g,''));
+  document.write("<form method=get action=supercube_parity.html>");
+  document.write("<input name=parity value='" + parity + "' style=width:40%;height:26px;>");
+  document.write("&nbsp;&nbsp;");
+  document.write("<input value=Go type=submit style=height:32px;width:80px;>");
+  document.write("<input name=hist value=" + hist + " type=hidden>");
+  document.write("</form>");
+  corners = parity.substr(0,1);
+  wings = parity.substr(1, parity.length-1);
+  wlen = wings.length;
+  wa = wings.split('');
+  rwa = wings.split('').reverse();
+  iwa = [];
+  for (i=0; i < wlen; i++)
+    iwa[i] = (wa[i] == '0') ? 1 : 0;
+  iwings = iwa.join('');
+  if (parity != '') {
+    if (parity.length < 2)
+      document.write("<br>Must be at least two values entered<br>");
+    else if (parity.length > 100)
+      document.write("<br>No more than 100 values can be entered<br>");
+    else {
+      v = parity.replace(/1/g, '');
+      v = v.replace(/0/g, '');
+      if (v.length != 0)
+        document.write("<br>Invalid Input, Enter only 0's and 1's<br>");
+      else 
+        show_parity();
+    }
+  }
+  if (hist != 0)
+    document.write ("<br><a href=\"javascript: history.go(-" + hist + ")\">Back</a><br><br>");
+  function show_parity() {
+    text();
+    document.write('<table class=td2 border=1 style="border-collapse:collapse; border-color:black;">');
+    document.write('<tr><td style=background-color:red>' + ((corners==0)?'&nbsp&nbsp':corners) + '</td>');
+    for (j=0; j < wlen; j++)
+      document.write('<td style=background-color:yellow>' + cf() + '</td>');
+    document.write('<td style=background-color:black>&nbsp;&nbsp;</td>');
+    document.write('</tr>');
+    for (i=0; i < wlen; i++) {
+      document.write('<tr>');
+      if (corners == 0)
+        map_arc_centers(wa, iwa);
+      else 
+        map_arc_centers(iwa, wa);
+      document.write('</tr>');
+    }
+    document.write('<tr><td style=background-color:lime>' + ((corners==0)?'':'<b>1</b>') + '</td>');
+    for (j=0; j < wlen; j++)
+      document.write('<td style=background-color:' + blue + '>' + wf() + '</td>');
+    document.write('<td style=background-color:red>&nbsp;</td>');
+    document.write('</tr>');
+    document.write('</table>');
+    document.write("<table><tr height=30><td></table>");
+    counts();
+    text2();
+  }
+  function map_arc_centers(ar1, ar2) {
+    if (rwa[i] == 0)
+      map_arc(ar1);
+    else
+      map_arc(ar2);
+  }
+  function map_arc(ar) {
+    document.write('<td style=background-color:' + blue + '>&nbsp;</td>');
+    for (j=0; j < wlen; j++) {
+      color = (j == wlen-i-1) ? 'lightgray' : 'orange';
+      document.write('<td style=background-color:' + color + '>');
+      document.write( ((ar[j] == '0') ? '' : '1') + '</td>');
+    }
+    document.write('<td style=background-color:yellow>&nbsp;</td>');
+  }
+  function cf() {
+    n = ((corners==0) ? wa[j] : iwa[j]);
+    return((n == 0) ? '' : n);
+  }
+  function wf() {
+    return((wa[j]==0)?'&nbsp':'<b>1</b>');
+  }
+  function counts() {
+    wct = wings.replace(/0/g, '').length;
+    wct0 = wings.length - wct;
+    if (corners == 0) {
+      pct = wct;
+      xct = 0;
+    }
+    else {
+      pct = wct0;
+      xct = wings.length;
+    }
+    if (corners == 1)
+      oct = wct * wct + wct0 * wct0 -xct;
+    else 
+      oct = 2 * wct * wct0;
+    otot = wings.length * (wings.length-1);
+    document.write('<table class=td2 border=1 style="border-collapse:collapse; border-color:black;">');
+    document.write('<tr style="background-color:white"><td>Orbits</td><td>With Parity</td><td>Total</td></tr>');
+    document.write("<tr style=color:black;background-color:lime><td>Corner</td><td style=text-align:center>" + corners + "</td><td style=text-align:center>1</td></tr>");
+    document.write("<tr style=color:black;background-color:" + blue + "><td>Wing Edge</td><td style=text-align:center>" + wct + "</td><td style=text-align:center>" + wings.length + "</td></tr>");
+    document.write("<tr style=color:black;background-color:lightgray><td>X-Center</td><td style=text-align:center>" + xct + "</td><td style=text-align:center>" + wings.length + "</td></tr>");
+    document.write("<tr style=color:black;background-color:yellow><td>+Center</td><td style=text-align:center>" + pct + "</td><td style=text-align:center>" + wings.length + "</td></tr>");
+    document.write("<tr style=color:black;background-color:orange><td>Arc Center</td><td style=text-align:center>" + oct + "</td><td style=text-align:center>" + otot + "</td></tr>");
+    document.write("<tr style=color:black;background-color:red><td>Central Edge</td><td style=text-align:center>" + corners + "</td><td style=text-align:center>1</td></tr>");
+    document.write('</table>');
+    document.write('<br>');
+  }
+  function text() {
+    var n = wings.length * 2 + 2;
+    var n2 = n + 1;
+    dim1 = n + 'x' + n;
+    dim2 = n2 + 'x' + n2;
+    str = dim1 + ' or ' + dim2;
+    document.write("<br><p>\
+          The following shows the parity for all orbits as viewed from the\
+          lower left quadrant of the cube.\
+          Cube Dimension is " + str + ", for even dimension cubes\
+          disregard the top row and rightmost column.\
+          Input parities are shown in bold, zeros are blank.</p>\
+          <br>");
+  }
+  function text2() {
+    document.write("<p>The Corner orbit and each of the X-Center and Arc Center orbits\
+        are uniquely identified by a single square in the above grid, the other\
+        orbits each have two squares.\
+        The +Center orbit parities are shown in the top row, the rightmost\
+        column shows the same orbits and are left blank.\
+        The Wing Edge parities are shown in the bottom row, the leftmost\
+        column shows the same orbits.\
+        The Central Edge orbit parity is shown in the upper left corner, the\
+        bottom right corner is the same orbit.\
+        <br><br>\
+        Each row of Arc Center orbit parities in the above grid is either\
+        the same as the Wing Edge orbit row or the toggled values depending on\
+        the combination of the Corner parity and the Wing Edge parity of the\
+        row, if they both have parity or they both do not have parity then it\
+        is the Wing Edge row, otherwise the toggled Wing Edge row.\
+        The Wing Edge row parities are not shown, pivot the bottom row of the\
+        grid 90 degrees counterclockwise to map them into the leftmost column.</p>");
+  }
+</script>
+</center>
+</body>
+</html>

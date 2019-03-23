@@ -1,0 +1,134 @@
+<!doctype html>
+<html>
+<head>
+ <title> Parity of a Permutation </title>
+ <meta name="robots" content="noindex, nofollow">
+ <link rel=icon href=mini_cube.png type=image/png>
+ <link rel="stylesheet" type="text/css" href="style.css">
+ <meta name=viewport content="width=device-width, initial-scale=1">
+ <style> .tabdata td {
+   padding-left:10px; padding-right:10px; text-align:center; } 
+ </style>
+ <script src=hist.js></script>
+</head>
+<body>
+<center>
+<font size="+2"> Parity of a Permutation </font>
+<br><br>
+<p> The following layout is used to map the 20 movable pieces on a 3x3 cube.
+Orientation is not needed to determine parity so it is factored out by using
+a single letter for each cube piece (as opposed to one for each facelet).
+That means the layout has the same letter twice for each edge piece and three
+times for each corner piece as can be seen below.</p>
+<pre>
+          +---------+                    
+          | A  B  C |                    
+          | D     E |                    
+          | F  G  H |                    
++---------+---------+---------+---------+
+| A  D  F | F  G  H | H  E  C | C  B  A |
+| I     J | J     K | K     L | L     I |
+| R  P  M | M  N  O | O  Q  T | T  S  R |
++---------+---------+---------+---------+
+          | M  N  O |                    
+          | P     Q |                    
+          | R  S  T |                    
+          +---------+                    
+</pre>
+<p>Parity of a Permution is Even or Odd depending on the number of swaps it 
+takes to restore order to the permutation (solve).
+Enter a permutation for any of the moves in the following table and press Go
+to see that the number of swaps for a Quarter-Twist on a 3x3 cube is Odd for
+Corners and Edges and Even for the Cube, Half-Twists are always Even.
+Cube Parity for a Quarter-Twist varies depending on cube size as shown 
+<a href=qtw_parity.html>here</a>.</p>
+<br>
+<table class=tabdata style=border-collapse:collapse;border-color:black border=0>
+ <tr><td>Move</td><td> Corners </td><td> Edges </td><td> Cube </td></tr>
+ <tr><td> U  </td><td> FAHCMORT </td><td> DGBEIJKLNPQS </td><td> FDAGBHECIJKLMNOPQRST </td></tr>
+ <tr><td> U2 </td><td> HFCAMORT </td><td> GEDBIJKLNPQS </td><td> HGFEDCBAIJKLMNOPQRST </td></tr>
+ <tr><td> U' </td><td> CHAFMORT </td><td> EBGDIJKLNPQS </td><td> CEHBGADFIJKLMNOPQRST </td></tr>
+ <tr height=20>
+ <tr><td> F  </td><td> ACMFOHRT </td><td> BDEJINGLKPQS </td><td> ABCDEMJFINGLOKHPQRST </td></tr>
+ <tr><td> F2 </td><td> ACOMHFRT </td><td> BDENIKJLGPQS </td><td> ABCDEONMIKJLHGFPQRST </td></tr>
+ <tr><td> F' </td><td> ACHOFMRT </td><td> BDEKIGNLJPQS </td><td> ABCDEHKOIGNLFJMPQRST </td></tr>
+ <tr height=20>
+ <tr><td> R </td><td> AHFOMTRC </td><td> BDKGIJQENPLS </td><td> ABHDKFGOIJQEMNTPLRSC </td></tr>
+ <tr><td> R2 </td><td> AOFTMCRH </td><td> BDQGIJLKNPES </td><td> ABODQFGTIJLKMNCPERSH </td></tr>
+ <tr><td> R' </td><td> ATFCMHRO </td><td> BDLGIJEQNPKS </td><td> ABTDLFGCIJEQMNHPKRSO </td></tr>
+</table>
+<br>
+<script>
+hst();
+perm = (typeof(perm) == 'undefined') ? '' : unescape(perm.replace(/\+/g,''));
+document.write('<form method=get action=parity.html>');
+document.write('<input name=hist value=' + hist + ' type=hidden>');
+document.write('<table><tr><td>');
+if (perm != '') {
+  pa = perm.split('');
+  len = perm.length;
+  rtn = val();
+  if (rtn == 0)
+    document.write('<input name=perm style=height:25px;width:300px>');
+  else 
+    document.write('<input name=perm value=' + perm + ' style=height:25px; width:300px>');
+}
+else 
+  document.write('<input name=perm style=height:26px;width:300px>');
+document.write('</td><td width=5><td>');
+document.write('<input value=Go type=submit style=height:32px;width:80px;padding:0px>');
+document.write('</td></tr></table>');
+document.write('</form>');
+if (perm != '') {
+  if (rtn == 0) 
+    parity(perm);
+  else if (rtn == 1)
+    document.write('<br>Duplicates not allowed: ' + pa[i] + '<br><br>');
+}
+else
+  document.write('<br>');
+if (hist != 0)
+  document.write("<a href=\"javascript: history.go(-" + hist + ")\">Back</a><br>");
+document.write("<br>");
+function parity(perm)
+{
+  sa = perm.split('').sort();
+  xa = [];
+  for (i=0; i < len; i++)
+    for (j=0; j < len; j++)
+      if (sa[j] == pa[i])
+        xa[i] = j;
+  document.write("<pre>");
+  document.write('Permutation:   ' + perm + '<br>');
+  for (i=n=0; i < len; i++) {
+    for (j=i+1; j < len; j++)
+      if (xa[j] == i) {
+        document.write('Swap ' + sa[xa[i]] + ' with ' + sa[xa[j]] + ': ');
+        xa[j] = xa[i];
+        xa[i] = i;
+        n++;
+        for (k=0; k < len; k++)
+          document.write(sa[xa[k]]);
+        document.write('<br>');
+      }
+  }
+  document.write('<br>');
+  document.write('Number of Swaps = ' + n + '<br>');
+  if (n%2 == 0)
+    document.write('Parity = Even<br>');
+  else
+    document.write('Parity = Odd<br>');
+  document.write("</pre>");
+}
+function val() {
+  for (i=f=0; i < len; i++)
+    for (j=0; j < len; j++)
+      if (i != j && pa[i] == pa[j])
+        return(1);
+  return(0);
+}
+</script>
+</center>
+</body>
+</html>
+

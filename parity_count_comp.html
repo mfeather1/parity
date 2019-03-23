@@ -1,0 +1,42 @@
+<!doctype html>
+<html>
+<head>
+ <title> Supercube Parity Count Computation </title>
+ <meta name="robots" content="noindex, nofollow">
+ <link rel=icon href=mini_cube.png type=image/png>
+ <link rel="stylesheet" type="text/css" href="style.css">
+ <meta name=viewport content="width=device-width, initial-scale=1">
+ <style> td {padding-left:10px; padding-right:10px; border-color:black} </style>
+</head>
+<body>
+<center>
+<font size="+2"> Supercube Parity Count Computation </font>
+</center>
+<br>
+<p>The following shows the computation of counts for the number of 
+orbits with parity for X-Centers, +Centers and Arc Centers 
+given the Cube Dimension, number of Wing Edge orbits with parity and 
+the Corner orbit parity.
+These computations yield the sames results as Christopher Mowla's 
+<a href=https://www.quora.com/If-we-need-to-express-a-Rubiks-cube-puzzle-in-a-mathematical-expression-how-it-can-be-expressed>Parity Equations</a>.
+Here is a listing of counts for cubes with dimension 6 to 23 for <a href=parity_623.html>comparison</a>.
+<br><br>
+N = Cube Dimension<br>
+W = #Wing Edge orbits with parity<br>
+Orb = Floor((N-2)/2) = #Orbits for Wings, XCenters or +Centers<br>
+W0 = Orb - W = #Wing Edge orbits without parity<br></p>
+<br>
+<table border=1 style="border-collapse:collapse; border-color:white;">
+ <tr> <td></td><td colspan=2 style=text-align:center>Corner Parity</td> </tr>
+ <tr> <td></td>  <td>No</td> <td>Yes</tr>
+ <tr> <td>X Centers</td> <td>0</td> <td>Orb</td> </tr>
+ <tr> <td>+ Centers</td> <td>W</td> <td>W0</td> </tr>
+ <tr> <td>Arc Centers</td> <td>2*W*W0</td> <td>W^2+W0^2-Orb</td> </tr>
+</table>
+<br>
+<center>
+<a href="javascript: history.go(-1)">Back</a>
+</center>
+<br><br>
+</body>
+</html>

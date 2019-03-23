@@ -1,0 +1,158 @@
+<!doctype html>
+<html>
+<head>
+ <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+ <title> Supercube - All Parity States </title>
+ <meta name="robots" content="noindex, nofollow">
+ <link rel=icon href=mini_cube.png type=image/png>
+ <link rel="stylesheet" type="text/css" href="style.css">
+ <meta name=viewport content="width=device-width, initial-scale=1">
+ <style> .td1 td {padding-left:10px; padding-right:10px; padding-top:10px; padding-bottom:10px; border:1px solid} </style>
+ <style> .td2 td {padding-left:10px; padding-right:10px; border:1px solid; color:black;} </style>
+ <style> .td3 td {padding-left:10px; padding-right:10px; border:0px solid} </style>
+ <script src=hist.js></script>
+ <script> hst(); </script>
+</head>
+<body>
+<center>
+<font size=+2> Supercube - All Parity States </font>
+<br><br>
+<p>For a 4x4 cube or larger the following will show all of the parity
+states, enter the number of Wing Edge Orbits (must be between 1 and 8).
+To see how to calculate counts of parity states for a cube of any dimension 
+go <a href=parity_count_comp.html>here</a></p>
+<br>
+<script>
+  val = (typeof(val) == 'undefined') ? '' : unescape(val.replace(/\+/g,''));
+</script>
+<form method=get action=supercube_parity2.html>
+<script> document.write("<input name=val value='" + val + "' style=width:30px;height:26px>"); </script>
+<script> document.write("<input name=hist value=" + hist + " type=hidden>"); </script>
+&nbsp;
+<input value=Go type=submit style=height:32px;width:80px;>
+</form>
+<br>
+<script>
+  blue = "#4080FF";
+  pow = [0, 2, 4, 8, 16, 32, 64, 128, 256, 512];
+  arr = [];
+  if (val != '') {
+    if (val >= 1 && val <= 8) {
+      text(val);
+      show_color_table();
+      val = Number(val) + 1;
+      list_binary(val);
+      for (var i=0; i < pow[val]; i++) {
+        parity = arr[i];
+        document.write(parity + '<br>');
+        corners = parity.substr(0,1);
+        wings = parity.substr(1, parity.length-1);
+        wlen = wings.length;
+        wa = wings.split('');
+        rwa = wings.split('').reverse();
+        iwa = [];
+        for (var j=0; j < wlen; j++)
+          iwa[j] = (wa[j] == '0') ? 1 : 0;
+        iwings = iwa.join('');
+        show_parity();
+      }
+    }
+    else
+      document.write('Enter a number between 1 and 8<br><br>');
+  }
+  if (hist != 0)
+    document.write ("<a href=\"javascript: history.go(-" + hist + ")\">Back</a><br><br>");
+  function list_binary(n) {
+    for (var i=0; i < pow[n]; i++) {
+      var s = '';
+      for (var j=n-1; j > 0; j--)
+        s += ((i>>j)%2);
+      s += (i%2);
+     arr[i] = s;
+    }
+  }
+  function show_parity() {
+    document.write('<table class=td2 border=1 style="border-collapse:collapse; border-color:black;">');
+    document.write('<tr><td style=background-color:red>' + ((corners==0)?'&nbsp&nbsp':corners) + '</td>');
+    for (var j=0; j < wlen; j++)
+      document.write('<td style=background-color:yellow>' + cf(j) + '</td>');
+    document.write('<td style=background-color:black>&nbsp;&nbsp;</td>');
+    document.write('</tr>');
+    for (var i=0; i < wlen; i++) {
+      document.write('<tr>');
+      if (corners == 0)
+        map_arc_centers(i, wa, iwa);
+      else 
+        map_arc_centers(i, iwa, wa);
+      document.write('</tr>');
+    }
+    document.write('<tr><td style=background-color:lime>' + ((corners==0)?'':'<b>1</b>') + '</td>');
+    for (var j=0; j < wlen; j++)
+      document.write('<td style=background-color:' + blue + '>' + ((wa[j]==0)?'&nbsp':'<b>1</b>') + '</td>');
+    document.write('<td style=background-color:red>&nbsp;</td>');
+    document.write('</tr>');
+    document.write('</table>');
+    document.write("<table><tr height=15><td></table>");
+  }
+  function map_arc_centers(i, ar1, ar2) {
+    if (rwa[i] == 0)
+      map_arc(i, ar1);
+    else
+      map_arc(i, ar2);
+  }
+  function map_arc(i, ar) {
+    document.write('<td style=background-color:' + blue + '>&nbsp;</td>');
+    for (var j=0; j < wlen; j++) {
+      var color = (j == wlen-i-1) ? 'lightgray' : 'orange';
+      document.write('<td style=background-color:' + color + '>');
+      document.write( ((ar[j] == '0') ? '' : '1') + '</td>');
+    }
+    document.write('<td style=background-color:yellow>&nbsp;</td>');
+  }
+  function cf(j) {
+    var n = ((corners==0) ? wa[j] : iwa[j]);
+    return((n == 0) ? '' : n);
+  }
+  function show_color_table() {
+    document.write("\
+  <table class=td3 border=0 style=\"border-collapse:collapse;\">\
+   <tr>\
+    <td style=color:black;background-color:lime>Corners</td>\
+    <td>\
+    <td style=color:black;background-color:#4080FF>Wing Edges</td>\
+    <td>\
+    <td style=color:black;background-color:lightgray>X Centers</td>\
+  </tr>\
+  <tr height=5>\
+  <tr>\
+    <td style=color:black;background-color:yellow>+ Centers</td>\
+    <td>\
+    <td style=color:black;background-color:orange>Arc Centers</td>\
+    <td>\
+    <td style=color:black;background-color:red>Central Edges</td>\
+  </tr>\
+  </table><br>");
+}
+
+  function text(n) {
+    n = Number(n);
+    tot = pow[n+1];
+    n = (n + 1) * 2;
+    var n2 = n + 1;
+    dim1 = n + 'x' + n;
+    dim2 = n2 + 'x' + n2;
+    str = dim1 + ' or ' + dim2;
+    document.write("\
+      <p>Here is the list of all " + tot + " possible parity states as\
+      viewed from the lower left\
+      <a href=cube_diagram.html>quadrant</a> of the cube.\
+      Cube Dimension is " + str + ", for even dimension cubes\
+      disregard the top row and rightmost column.\
+      The binary number above each grid is the Corner parity followed by each\
+      Wing Edge orbit parity, these parities are shown in bold in the bottom\
+      row of the grid, zeros are left blank.</p><br>");
+  }
+</script>
+</center>
+</body>
+</html>
