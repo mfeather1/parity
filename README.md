@@ -1,1 +1,1 @@
-# parity
+Supercube Parity
